@@ -1,0 +1,229 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #12372A;
+  --color-secondary: #436850;
+  --color-accent: #ADBC9F;
+  --color-cream: #F8F6EF;
+  --color-gold: #C6A15B;
+  --color-ink: #152420;
+  --ease-signature: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.heading-font {
+  font-family: 'Abril Fatface', cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-[var(--color-ink)] antialiased;
+  font-family: 'Jost', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Selection + focus */
+::selection {
+  background-color: var(--color-gold);
+  color: #fff;
+}
+
+a, button {
+  transition: color 200ms var(--ease-signature), background-color 200ms var(--ease-signature),
+    border-color 200ms var(--ease-signature), transform 200ms var(--ease-signature),
+    box-shadow 200ms var(--ease-signature);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Thin sage scrollbar for the whole page */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 999px;
+  border: 2px solid var(--color-cream);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}
+
+/* ---------- Reusable design system utilities ---------- */
+
+/* Primary CTA: deep forest fill, gold shimmer sweep on hover */
+.btn-primary {
+  @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold tracking-wide text-white shadow-soft;
+  transition: transform 250ms var(--ease-signature), box-shadow 250ms var(--ease-signature), background-color 250ms var(--ease-signature);
+}
+.btn-primary:hover {
+  @apply bg-[var(--color-secondary)] shadow-lift;
+  transform: translateY(-2px);
+}
+.btn-primary:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+/* Outline / secondary CTA */
+.btn-outline {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-[var(--color-primary)] px-6 py-[10px] text-sm font-semibold tracking-wide text-[var(--color-primary)];
+}
+.btn-outline:hover {
+  @apply bg-[var(--color-primary)] text-white;
+  transform: translateY(-2px);
+}
+
+/* Card surface used across product cards, panels */
+.card-surface {
+  @apply bg-white rounded-2xl border border-black/5 shadow-soft;
+  transition: transform 350ms var(--ease-signature), box-shadow 350ms var(--ease-signature), border-color 350ms var(--ease-signature);
+}
+.card-surface:hover {
+  @apply shadow-lift border-[var(--color-accent)];
+  transform: translateY(-6px);
+}
+
+/* Signature: leaf-underline grows from center on hover, like a stem unfurling */
+.leaf-underline {
+  position: relative;
+  display: inline-block;
+}
+.leaf-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-gold), var(--color-secondary));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 350ms var(--ease-signature);
+}
+.leaf-underline:hover::after,
+.leaf-underline.is-active::after {
+  transform: scaleX(1);
+}
+
+/* Small uppercase eyebrow label used above section headings */
+.eyebrow {
+  @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-[var(--color-secondary)];
+}
+.eyebrow::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: var(--color-gold);
+  display: inline-block;
+}
+
+/* Discount / badge ribbon on product images */
+.badge-ribbon {
+  @apply absolute top-3 left-3 z-10 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-soft backdrop-blur-sm;
+  background-color: rgba(18, 55, 42, 0.9);
+}
+
+/* Shimmer sweep effect (used sparingly, e.g. featured CTA) */
+.shimmer-sweep {
+  background-image: linear-gradient(110deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%);
+  background-size: 200% 100%;
+}
+.shimmer-sweep:hover {
+  animation: shimmer 1.2s linear;
+}
+
+/* Fade-up on scroll reveal helper (paired with useReveal hook) */
+.reveal {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 700ms var(--ease-signature), transform 700ms var(--ease-signature);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Responsive Product Grid */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 0 1.5rem;
+}
+
+/* Mobile: Show only 1 product */
+@media (max-width: 767px) {
+  .grid-responsive {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0 1rem;
+  }
+  .product-item {
+    min-width: unset !important;
+  }
+}
+
+/* Tablet: Show 2-3 products */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .grid-responsive {
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+}
+
+/* Desktop: Show exactly 5 products */
+@media (min-width: 1024px) {
+  .grid-responsive {
+    grid-template-columns: repeat(5, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 0 1.5rem;
+  }
+}
+
+/* Admin Panel Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* hide scrollbar for overflow containers */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.scroll-hidden { overflow: hidden; }
+.scroll-smooth { scroll-behavior: smooth; }
+
